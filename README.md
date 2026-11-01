@@ -39,7 +39,18 @@
 
 </div>
 
-## 手动安装
+## 安装
+
+> [!NOTE]
+> 宠物保存在你的 ChatGPT 账号里，Codex 桌面端和 ChatGPT 共用同一份，在一处装好，另一处也能选。
+
+### 方式一：让 Codex 用 Pets 插件安装（推荐）
+
+在 Codex 里对它说：
+
+> 用 Pets 插件帮我安装水豚噜噜：下载 <https://github.com/2Wren/lulu-codex-pet> 里的 `lulu/spritesheet.webp`，这是已经做好并校验过的精灵表，直接上传，不要重新生成或修改。名字用「水豚噜噜」，描述用 `lulu/pet.json` 里的 `description`，创建后选中它。
+
+### 方式二：手动放进宠物文件夹
 
 1. 克隆仓库：
 
@@ -51,9 +62,7 @@
 3. 将仓库中的 `lulu` 文件夹复制到打开的目录。
 4. 返回 Codex App，点击 **Refresh**，然后选择水豚噜噜。
 
-### 命令行安装
-
-#### macOS / Linux
+命令行安装（macOS / Linux）：
 
 ```bash
 git clone https://github.com/2Wren/lulu-codex-pet.git
@@ -61,7 +70,7 @@ mkdir -p "${CODEX_HOME:-$HOME/.codex}/pets/lulu"
 cp -R lulu-codex-pet/lulu/. "${CODEX_HOME:-$HOME/.codex}/pets/lulu/"
 ```
 
-#### Windows PowerShell
+命令行安装（Windows PowerShell）：
 
 ```powershell
 git clone https://github.com/2Wren/lulu-codex-pet.git
@@ -71,16 +80,18 @@ New-Item -ItemType Directory -Force $petDir | Out-Null
 Copy-Item ".\lulu-codex-pet\lulu\*" $petDir -Recurse -Force
 ```
 
-## 关于 Web 端
+> [!TIP]
+> Codex 第一次读到这个文件夹时，会把噜噜上传到你的账号，之后显示的是账号里那份。以后再改文件夹里的文件不会同步过去，更新请看下一节。
 
-> [!NOTE]
-> Codex 桌面端与 ChatGPT Web 端的自定义宠物分开管理；安装到桌面端的噜噜无法同步到 Web 端。
+### 方式三：只用 ChatGPT 网页版
 
-Web 端请下载 [`lulu/web-spritesheet.png`](./lulu/web-spritesheet.png)，然后在 **Settings → Personalization → Pet → Upload pet** 中上传。该文件是 Web 端所需的 `1536 × 1872` 透明 PNG；桌面端使用的 `spritesheet.webp`（`1536 × 2288`）不能直接上传到 Web 端。
+在 **Settings → Personalization → Pet → Upload pet** 中上传 [`lulu/spritesheet.webp`](./lulu/spritesheet.webp)。上传框支持 `1536 × 2288` 的 v2 精灵表。
 
-也可让 Codex 直接帮你上传：
+## 更新到新版本
 
-> 请帮我把水豚噜噜设置为 ChatGPT Web 宠物：<https://github.com/2Wren/lulu-codex-pet>。下载仓库中的 `lulu/web-spritesheet.png`，然后在我已登录的 ChatGPT Web 中进入 **Settings → Personalization → Pet → Upload pet**，完成上传并启用噜噜，最后告诉我结果。
+拉取仓库的最新版本后，在 Codex 里对它说：
+
+> 用 Pets 插件把我的「水豚噜噜」的精灵表更新为 `<仓库路径>/lulu/spritesheet.webp`。直接用这个文件，不要重新生成或修改，宠物 ID 保持不变。
 
 ## 文件结构
 
@@ -88,20 +99,22 @@ Web 端请下载 [`lulu/web-spritesheet.png`](./lulu/web-spritesheet.png)，然�
 lulu/
 ├── pet.json
 ├── spritesheet.webp
-├── web-spritesheet.png
 └── previews/
     ├── idle.png
     └── …
 ```
 
-- `pet.json`：桌宠元数据
-- `spritesheet.webp`：Codex v2 动画精灵表
-- `web-spritesheet.png`：ChatGPT Web 端上传素材
+- `pet.json`：桌宠元数据（名字、描述）
+- `spritesheet.webp`：v2 动画精灵表（`1536 × 2288`，8 列 × 11 行，共 73 帧），Codex 桌面端和 ChatGPT 通用
 - `previews/`：README 预览图片，不影响桌宠运行
 
 ## 自己重新生成
 
-噜噜的精灵表由 Codex 内置的 `$hatch-pet` 技能生成，再用 `scripts/release.py` 校验并导出 Web 端素材和预览图。
+噜噜的精灵表最初用 Codex 内置的 `$hatch-pet` 技能生成。现在官方的做法是 Codex 的 **Pets 插件**（`create-pet` / `update-pet`），格式相同。`scripts/release.py` 按 Pets 插件的规范校验精灵表，并导出 README 里的预览图：
+
+```bash
+python3 scripts/release.py --source <含 pet.json 和 spritesheet.webp 的目录>
+```
 
 ## 版权声明
 

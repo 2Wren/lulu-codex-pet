@@ -1,4 +1,4 @@
-# hatch-pet 运行目录（中间产物和 QA 图）
+# 历次生成的精灵表备份，只留在本地
 output/
 
 # 噜噜参考图，版权归权利方，不提交
@@ -7,6 +7,3 @@ reference/
 __pycache__/
 .venv/
 .DS_Store
-
-# 生成用的提示词，只留在本地
-PROMPT.md

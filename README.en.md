@@ -39,7 +39,18 @@ A Capybara Lulu (水豚噜噜) desktop pet for Codex
 
 </div>
 
-## Manual Installation
+## Installation
+
+> [!NOTE]
+> Pets are stored in your ChatGPT account and shared between the Codex desktop app and ChatGPT: install Lulu in one and you can pick it in the other.
+
+### Option 1: Ask Codex to install it with the Pets plugin (recommended)
+
+Tell Codex:
+
+> Use the Pets plugin to install Capybara Lulu: download `lulu/spritesheet.webp` from <https://github.com/2Wren/lulu-codex-pet>. It is a finished, validated sprite sheet, so upload it as is without regenerating or editing it. Name it "水豚噜噜", use the `description` from `lulu/pet.json`, and select it after creating it.
+
+### Option 2: Copy it into the pets folder
 
 1. Clone the repository:
 
@@ -51,9 +62,7 @@ A Capybara Lulu (水豚噜噜) desktop pet for Codex
 3. Copy the `lulu` folder from the repository into the opened directory.
 4. Return to the Codex App, click **Refresh**, and select Capybara Lulu.
 
-### Command-line Installation
-
-#### macOS / Linux
+Command line (macOS / Linux):
 
 ```bash
 git clone https://github.com/2Wren/lulu-codex-pet.git
@@ -61,7 +70,7 @@ mkdir -p "${CODEX_HOME:-$HOME/.codex}/pets/lulu"
 cp -R lulu-codex-pet/lulu/. "${CODEX_HOME:-$HOME/.codex}/pets/lulu/"
 ```
 
-#### Windows PowerShell
+Command line (Windows PowerShell):
 
 ```powershell
 git clone https://github.com/2Wren/lulu-codex-pet.git
@@ -71,16 +80,18 @@ New-Item -ItemType Directory -Force $petDir | Out-Null
 Copy-Item ".\lulu-codex-pet\lulu\*" $petDir -Recurse -Force
 ```
 
-## ChatGPT Web
+> [!TIP]
+> The first time Codex reads this folder, it uploads Lulu to your account and shows that copy from then on. Later edits to the files in the folder are not synced; see the next section to update.
 
-> [!NOTE]
-> Custom pets for the Codex desktop app and ChatGPT Web are managed separately; Lulu installed in the desktop app does not sync to the web.
+### Option 3: ChatGPT Web only
 
-For the web, download [`lulu/web-spritesheet.png`](./lulu/web-spritesheet.png) and upload it under **Settings → Personalization → Pet → Upload pet**. This is the `1536 × 1872` transparent PNG the web expects; the desktop `spritesheet.webp` (`1536 × 2288`) cannot be uploaded to the web directly.
+Upload [`lulu/spritesheet.webp`](./lulu/spritesheet.webp) under **Settings → Personalization → Pet → Upload pet**. The upload dialog accepts `1536 × 2288` v2 sprite sheets.
 
-You can also ask Codex to upload it for you:
+## Updating
 
-> Please set Capybara Lulu as my ChatGPT Web pet: <https://github.com/2Wren/lulu-codex-pet>. Download `lulu/web-spritesheet.png` from the repository, then in my signed-in ChatGPT Web go to **Settings → Personalization → Pet → Upload pet**, upload and enable Lulu, and tell me the result.
+After pulling the latest version of the repository, tell Codex:
+
+> Use the Pets plugin to replace the sprite sheet of my "水豚噜噜" pet with `<repo path>/lulu/spritesheet.webp`. Use this file as is without regenerating or editing it, and keep the same pet ID.
 
 ## File Structure
 
@@ -88,20 +99,22 @@ You can also ask Codex to upload it for you:
 lulu/
 ├── pet.json
 ├── spritesheet.webp
-├── web-spritesheet.png
 └── previews/
     ├── idle.png
     └── …
 ```
 
-- `pet.json`: pet metadata
-- `spritesheet.webp`: Codex v2 animation spritesheet
-- `web-spritesheet.png`: upload asset for ChatGPT Web
+- `pet.json`: pet metadata (name, description)
+- `spritesheet.webp`: v2 animation sprite sheet (`1536 × 2288`, 8 columns × 11 rows, 73 frames), used by both the Codex desktop app and ChatGPT
 - `previews/`: README preview images; not needed at runtime
 
 ## Regenerating
 
-Lulu's spritesheet is generated with the built-in Codex `$hatch-pet` skill, then validated and exported to web assets and previews by `scripts/release.py`.
+Lulu's sprite sheet was originally generated with the built-in Codex `$hatch-pet` skill. The official workflow is now the Codex **Pets plugin** (`create-pet` / `update-pet`), which uses the same format. `scripts/release.py` validates the sprite sheet against the Pets plugin's rules and exports the README previews:
+
+```bash
+python3 scripts/release.py --source <folder containing pet.json and spritesheet.webp>
+```
 
 ## Copyright
 
